@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 app.use(morgan('dev'));
-app.use(express.raw({ type: "application/json" }));
 
 /** 
    app.use(express.raw({ type: "application/vnd.custom-type" }));
