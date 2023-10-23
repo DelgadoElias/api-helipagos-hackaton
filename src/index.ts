@@ -2,11 +2,18 @@ import "./lib/db";
 import express from "express";
 import countryRoutes from "./routes/country";
 import personRoutes from "./routes/person";
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const port = process.env.PORT || 3333;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(cookieParser());
+app.use(morgan('dev'));
+app.use(express.raw({ type: "application/json" }));
+
 /** 
    app.use(express.raw({ type: "application/vnd.custom-type" }));
    app.use(express.text({ type: "text/html" }));
