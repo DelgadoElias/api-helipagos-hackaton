@@ -98,6 +98,7 @@ class PersonController {
       res.json({
         content: persons,
         status: 200,
+        length: persons.length
       });
     } catch (error) {
       res
