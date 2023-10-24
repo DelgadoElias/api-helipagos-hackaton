@@ -16,6 +16,27 @@ class PersonController {
     res.status(201).json(ResponseHandler.ResourceCreated);
   }
 
+  static async updateProperties(req: Request, res: any) {
+    const id = req.params.id;
+    const body = req.body;
+
+    if (!id) {
+      res.status(400).json(ResponseHandler.BadRequest("id"));
+    }
+    if (!body) {
+      res.status(400).json(ResponseHandler.BadRequest("body"));
+    }
+    try {
+      const updatedPerson = await PersonModel.findByIdAndUpdate(id, {
+        ...body,
+      });
+
+      res.status(202).json(ResponseHandler.ResourceUpdated(updatedPerson));
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
   static async resetProperties(req: Request, res: any) {
     const id = req.body.id;
 

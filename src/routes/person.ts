@@ -3,6 +3,7 @@ import PersonController from "../controllers/person.controller";
 
 const routes = Router();
 
+routes.put("/edit/:id", PersonController.updateProperties);
 routes.post("/present", PersonController.setPresent);
 routes.post("/confirmed", PersonController.setConfirmed);
 routes.post("/successfull", PersonController.setSuccessfully);
