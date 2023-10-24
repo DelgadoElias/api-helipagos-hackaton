@@ -16,6 +16,25 @@ class PersonController {
     res.status(201).json(ResponseHandler.ResourceCreated);
   }
 
+  static async resetProperties(req: Request, res: any) {
+    const id = req.body.id;
+
+    if (!id) {
+      res.status(400).json(ResponseHandler.BadRequest("id"));
+    }
+    try {
+      const updatedPerson = await PersonModel.findByIdAndUpdate(id, {
+        isPresent: false,
+        isSuccessfully: false,
+        isConfirmed: false,
+      });
+
+      res.status(202).json(ResponseHandler.ResourceUpdated(updatedPerson));
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
   static async setPresent(req: Request, res: any) {
     const id = req.body.id;
 
@@ -23,14 +42,11 @@ class PersonController {
       res.status(400).json(ResponseHandler.BadRequest("id"));
     }
     try {
-
       const updatedPerson = await PersonModel.findByIdAndUpdate(id, {
-        isPresent: true
+        isPresent: true,
       });
 
-      res
-        .status(202)
-        .json(ResponseHandler.ResourceUpdated(updatedPerson));
+      res.status(202).json(ResponseHandler.ResourceUpdated(updatedPerson));
     } catch (error) {
       res.status(500).json(error);
     }
@@ -46,10 +62,7 @@ class PersonController {
       isConfirmed: true,
     });
 
-
-    res
-    .status(202)
-    .json(ResponseHandler.ResourceUpdated(updatedPerson));
+    res.status(202).json(ResponseHandler.ResourceUpdated(updatedPerson));
   }
 
   static async setSuccessfully(req: Request, res: any) {
@@ -62,9 +75,7 @@ class PersonController {
       isSuccessfully: true,
     });
 
-    res
-    .status(202)
-    .json(ResponseHandler.ResourceUpdated(updatedPerson));
+    res.status(202).json(ResponseHandler.ResourceUpdated(updatedPerson));
   }
 
   static async getPersons(req: Request, res: any) {
@@ -98,7 +109,7 @@ class PersonController {
       res.json({
         content: persons,
         status: 200,
-        length: persons.length
+        length: persons.length,
       });
     } catch (error) {
       res

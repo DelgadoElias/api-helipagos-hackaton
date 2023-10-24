@@ -9,5 +9,7 @@ routes.post("/successfull", PersonController.setSuccessfully);
 routes.post("/create", PersonController.createUser);
 routes.get("/list", PersonController.getPersons);
 routes.get("/:person", PersonController.getPersonDetail);
+routes.post("/reset", PersonController.resetProperties);
+
 
 export default routes;
