@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import "./lib/db";
 import express from "express";
 import countryRoutes from "./routes/country";
