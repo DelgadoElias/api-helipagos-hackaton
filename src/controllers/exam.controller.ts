@@ -60,6 +60,31 @@ class ExamController {
         .json({ error: "Hubo un error al obtener la lista de personas" });
     }
   }
+
+  static async reactiveHowManyFinish(req: Request, res: any) {
+    // Configura el middleware para habilitar Server-Sent Events (SSE) solo en esta ruta
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    let intervalNumber = 0;
+
+    const allSuccessfully = (await PersonModel.find({ isSuccessfully: true }))
+      .length;
+
+    const sendEvent = (data: number) => {
+      res.write(JSON.stringify(allSuccessfully));
+    };
+
+    const interval = setInterval(() => {
+      sendEvent(intervalNumber);
+      intervalNumber++;
+    }, 1000);
+
+    res.on("close", () => {
+      clearInterval(interval);
+    });
+  }
 }
 
 export default ExamController;
