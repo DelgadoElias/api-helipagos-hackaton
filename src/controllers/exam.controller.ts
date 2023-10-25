@@ -36,6 +36,30 @@ class ExamController {
       res.status(500).json(ResponseHandler.InternalError);
     }
   }
+
+  static async getExams(req: Request, res: any) {
+    try {
+      const filter: any = {};
+
+      if (req.query.text) {
+        filter.githubName = req.query.text;
+      }
+
+      // Realiza la consulta en la base de datos utilizando el modelo de Mongoose
+      const exams = await ExamModel.find(filter);
+
+      // Devuelve el resultado como JSON
+      res.json({
+        content: exams,
+        status: 200,
+        length: exams.length,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Hubo un error al obtener la lista de personas" });
+    }
+  }
 }
 
 export default ExamController;
