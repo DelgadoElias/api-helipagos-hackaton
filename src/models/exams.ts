@@ -4,6 +4,7 @@ interface IExam extends Document {
   personId: string;
   githubName: string;
   name: string;
+  repoName: string;
 }
 
 const ExamSchema = new Schema({
@@ -15,8 +16,16 @@ const ExamSchema = new Schema({
     type: String,
   },
   name: {
-    type: String
-  }
+    type: String,
+  },
+  note: {
+    type: Number,
+    default: 0,
+  },
+  repoName: {
+    type: String,
+    default: "",
+  },
 });
 
 const ExamModel = model<IExam>("Exam", ExamSchema);

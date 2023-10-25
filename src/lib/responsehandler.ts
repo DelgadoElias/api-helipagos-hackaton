@@ -14,6 +14,10 @@ class ResponseHandler {
   static Accepted(value: any) {
     return { message: "Recurso encontrado", value };
   }
+
+  static get InternalError() {
+    return { message: "Error interno del servidor", status: 500 };
+  }
 }
 
 export default ResponseHandler;

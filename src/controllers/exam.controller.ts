@@ -1,27 +1,40 @@
 import { Request } from "express";
 import ResponseHandler from "../lib/responsehandler";
 import { ExamModel } from "../models/exams";
+import UtilTools from "../lib/utils";
+import { PersonModel } from "../models/person";
 
 class ExamController {
-  static async setNewExam(req: Request, res: any) {
-    const githubName = req.body.github;
-    const personId = req.body.personId;
-    const personName = req.body.name ?? "not-provided";
+  static async setNewExamSolved(req: Request, res: any) {
+    const isMissingProperties = UtilTools.hasMissingProperties(req.body, [
+      "githubName",
+      "personId",
+      "repoName",
+    ]);
 
-    if (!githubName) {
-      res.status(400).json(ResponseHandler.BadRequest("githubName"));
+    if (isMissingProperties.value === true) {
+      res
+        .status(400)
+        .json(ResponseHandler.BadRequest(isMissingProperties.message));
+      return;
     }
-    if (!personId) {
-      res.status(400).json(ResponseHandler.BadRequest("personName"));
+
+    const { githubName, personId, repoName } = req.body;
+
+    try {
+      const personWhoFinish = await PersonModel.findById(personId);
+
+      const newExamSetted = await ExamModel.create({
+        githubName,
+        personId,
+        name: personWhoFinish?.name,
+        repoName,
+      });
+
+      res.status(201).json(ResponseHandler.Accepted(newExamSetted));
+    } catch (error) {
+      res.status(500).json(ResponseHandler.InternalError);
     }
-
-    const newExamSetted = await ExamModel.create({
-      githubName,
-      personId,
-      name: personName,
-    });
-
-    res.status(201).json(ResponseHandler.Accepted(newExamSetted));
   }
 }
 
